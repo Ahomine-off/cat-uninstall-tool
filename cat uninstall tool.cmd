@@ -1,0 +1,5 @@
+@echo off
+title CatUninstaller
+echo Lancement de l’interface féline...
+
+powershell -NoLogo -WindowStyle Hidden -ExecutionPolicy Bypass -Command "Add-Type -AssemblyName System.Windows.Forms; $form = New-Object Windows.Forms.Form; $form.Text = 'CatUninstaller'; $form.Width = 400; $form.Height = 200; $form.StartPosition = 'CenterScreen'; $label = New-Object Windows.Forms.Label; $label.Text = 'Nom de l’app à désinstaller :'; $label.AutoSize = $true; $label.Top = 20; $label.Left = 20; $form.Controls.Add($label); $textbox = New-Object Windows.Forms.TextBox; $textbox.Width = 200; $textbox.Top = 50; $textbox.Left = 20; $form.Controls.Add($textbox); $button = New-Object Windows.Forms.Button; $button.Text = 'Désinstaller'; $button.Top = 90; $button.Left = 20; $button.Add_Click({ $app = $textbox.Text; if ($app -ne '') { try { Get-WmiObject -Query \"SELECT * FROM Win32_Product WHERE Name LIKE '%$app%'\" | ForEach-Object { $_.Uninstall() }; [System.Windows.Forms.MessageBox]::Show('Désinstallation réussie !', 'Succès') } catch { [System.Windows.Forms.MessageBox]::Show('Erreur lors de la désinstallation.', 'Erreur') } } }); $form.Controls.Add($button); $form.ShowDialog();"
